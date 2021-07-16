@@ -2,8 +2,7 @@
 
 import express from 'express';
 import { Request, Response, NextFunction } from 'express';
-import { MongoError } from 'mongodb';
-import { Singleton } from '../singleton/Singleton';
+import { MonoStateFactory } from '../factory/MonoStateFactory';
 import { corsConfig } from '../config/cors';
 import { bodyParser } from '../config/bodyParser';
 import { debug } from 'debug';
@@ -14,27 +13,22 @@ import cors from 'cors';
 
 const app = express();
 
-app.use(compression());
-app.use(cors(corsConfig));
-app.use(bodyParser);
-
-/**
- * Server error
- */
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  debug(err.stack);
-  res.status(500).send('Ocorreu um erro !');
-});
-
-/**
- * Singleton
- */
-Singleton.boot().then(async () => {
-  app.set('env', await Singleton.getEnvInstance());
-  app.set('db', await Singleton.getDatabaseInstance());
-  app.set('logger', await Singleton.getLoggerInstance());
-});
-
-app.use('/api', routes);
+(async (app) => {
+  const { env } = await MonoStateFactory.create('Env');
+  const logger = await MonoStateFactory.create('Logger');
+  const database = await MonoStateFactory.create('Database');
+  
+  app.use(compression())
+    .use(cors(corsConfig))
+    .use(bodyParser)
+    .use((err: any, req: Request, res: Response, next: NextFunction) => {
+      debug(err.stack);
+      res.status(500).send('Ocorreu um erro !');
+    })
+    .set('db', database)
+    .set('logger', logger)
+    .set('env', env.parsed)
+    .use('/api', routes)
+})(app);
 
 export default app;

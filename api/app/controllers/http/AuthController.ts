@@ -2,7 +2,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 
-export default class AuthController {
+export class AuthController {
     /**
      * Autenticação
      * @param req 
@@ -10,6 +10,7 @@ export default class AuthController {
      * @param next 
      */
     public async login(req: Request, res: Response, next: NextFunction) {
+        console.log((req.app.get('env')))
         res.json({
             status:true,
             id:req.params.id
