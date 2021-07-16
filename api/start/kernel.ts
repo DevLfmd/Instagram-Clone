@@ -30,7 +30,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
  * Singleton
  */
 Singleton.boot().then(async () => {
-  app.set('env', await Singleton.getLoggerInstance());
+  app.set('env', await Singleton.getEnvInstance());
   app.set('db', await Singleton.getDatabaseInstance());
   app.set('logger', await Singleton.getLoggerInstance());
 });
