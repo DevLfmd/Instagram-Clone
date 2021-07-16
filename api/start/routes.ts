@@ -9,8 +9,9 @@ const Route = express.Router();
 /**
  * Rotas de autenticação
  */
-Route.get("/entrar", (req: Request, res: Response, next: NextFunction) => (
-    new AuthController().login(req, res, next)
+Route.get("/entrar/:id", async (req: Request, res: Response, next: NextFunction) => (
+    await new AuthController()
+        .login(req, res, next)
 ));
 
 export default Route;

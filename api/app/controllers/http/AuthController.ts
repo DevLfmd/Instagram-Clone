@@ -10,7 +10,6 @@ export default class AuthController {
      * @param next 
      */
     public async login(req: Request, res: Response, next: NextFunction) {
-        console.log('Request URL:', req.originalUrl)
         res.json({
             status:true,
             id:req.params.id

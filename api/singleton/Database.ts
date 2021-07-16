@@ -1,9 +1,7 @@
-import { Db, MongoClient, MongoError } from 'mongodb';
+'use strict'
 
-type MongoDBCredential = {
-    dbName: string;
-    username: string,
-};
+import { Db, MongoClient, MongoError } from 'mongodb';
+import dotenv from 'dotenv';
 
 export class Database {
     private static _instance: Database;
@@ -12,19 +10,21 @@ export class Database {
 
     private constructor() {};
 
-    public static async getInstance(cred: Readonly<MongoDBCredential>): Promise<Database> {
-        return new Promise((resolve, reject) => {
-            if(this._instance) {
-                resolve(this._instance);
-            }
-            
+    public static async getInstance(): Promise<Database> {
+        return new Promise(async (resolve, reject) => {
+            const { parsed }: any = dotenv.config();
             this._instance = new Database();
-            this._instance._dbClient = new MongoClient(`${cred.dbName}://${cred.username}` , { useUnifiedTopology: true });
+            this._instance._dbClient = await MongoClient.connect(
+                `${parsed.DB_CONNECTION}://${parsed.DB_HOST}`, { 
+                    useUnifiedTopology: true 
+                }
+            );
+            
             this._instance._dbClient.connect((error: MongoError) => {
                 if(error)
                     reject(error);
                     
-                this._instance._database = this._instance._dbClient.db(cred.dbName);
+                this._instance._database = this._instance._dbClient.db(parsed.DB_DATABASE);
                 resolve(this._instance);
             });
         });    
