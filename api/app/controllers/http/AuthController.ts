@@ -1,6 +1,7 @@
 'use strict'
 
 import { Request, Response, NextFunction } from 'express';
+import { UserRepository } from '../../../repositories/UserRepository';
 
 export class AuthController {
     /**
@@ -10,7 +11,12 @@ export class AuthController {
      * @param next 
      */
     public async login(req: Request, res: Response, next: NextFunction) {
-        console.log((req.app.get('env')))
+        const { db } = req.app.get('db');
+        const { login, password } = req.body;
+
+        const repository = new UserRepository(db, 'users');
+        const user = await repository.findByCredentials(login, password);
+        
         res.json({
             status:true,
             id:req.params.id

@@ -9,7 +9,7 @@ const Route = express.Router();
 /**
  * Rotas de autenticação
  */
-Route.get("/entrar/", async (req: Request, res: Response, next: NextFunction) => (
+Route.post("/entrar/", async (req: Request, res: Response, next: NextFunction) => (
     await new AuthController()
         .login(req, res, next)
 ));
