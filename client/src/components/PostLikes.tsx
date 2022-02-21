@@ -12,14 +12,14 @@ const Component: React.FC<TProps> = () => (
         <View style={styles.txtContainer}>
             <Text> 
                 Curtido por
-                <Text style={styles.textBold}>_paralyzer</Text>
+                <Text style={styles.textBold}> _paralyzer </Text>
                 e
-                <Text style={styles.textBold}>outras pessoas</Text>
+                <Text style={styles.textBold}> outras pessoas </Text>
             </Text>
         </View>
         <View style={styles.txtContainer}>
             <Text>
-                <Text style={styles.textBold}>michaelangelobatioofficial &nbsp;</Text>
+                <Text style={styles.textBold}> michaelangelobatioofficial &nbsp; </Text>
                 Excerpt of "holy Diver!" See the full version on the GoDps Music Live app! 
             </Text>
         </View>
